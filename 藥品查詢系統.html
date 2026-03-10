@@ -3,17 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏥 藥品查詢系統 雲端資料版</title>
-
-    <!-- ✅ PWA & iOS 專用標籤開始 -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0d6efd">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="藥品查詢">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
-    <!-- ✅ PWA & iOS 專用標籤結束 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -52,7 +43,6 @@
             border-radius: 1rem;
         }
 
-        /* 標題列工具按鈕 */
         .header-tools {
             display: flex;
             gap: 0.5rem;
@@ -87,7 +77,6 @@
             border-left: 0.4rem solid #0d6efd;
         }
 
-        /* 篩選按鈕樣式 */
         .btn-filter-group {
             display: flex;
             flex-wrap: wrap;
@@ -103,6 +92,7 @@
             background-color: #fff;
             color: #495057;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .btn-filter:hover {
@@ -147,6 +137,21 @@
             font-weight: bold;
             text-decoration: underline;
         }
+
+        /* 懷孕等級專用小黑框 */
+        .preg-box {
+            display: inline-block;
+            border: 1px solid #666;
+            width: 24px;
+            height: 24px;
+            line-height: 22px;
+            text-align: center;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #333;
+            background-color: #fff;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 
@@ -160,30 +165,28 @@
         <header class="mb-4 border-bottom pb-3 d-flex justify-content-between align-items-start">
             <div>
                 <h1 class="h3 mb-0" style="color: #2c3e50; font-weight: bold;">💊 藥品查詢系統 <small
-                        class="text-muted fs-6">雲端資料版 v2.9.6</small></h1>
+                        class="text-muted fs-6">雲端資料版</small></h1>
                 <div id="display-date" class="badge-date">資料生成時間：載入中...</div>
             </div>
             <nav class="header-tools" aria-label="外部工具連結">
-                <a href="https://mcp.fda.gov.tw/im" target="_blank" class="tool-link"
-                    title="開啟 FDA 仿單查詢系統 (另開新視窗)">仿單查詢</a>
-                <a href="https://www.nhi.gov.tw/ch/np-2505-1.html" target="_blank" class="tool-link"
-                    title="開啟健保藥品給付規定 (另開新視窗)">藥品給付</a>
-                <a href="https://info.nhi.gov.tw/INAE3000/INAE3000S01" target="_blank" class="tool-link"
-                    title="開啟健保用藥品項查詢 (另開新視窗)">健保用藥</a>
-                <a href="https://medcloud2.nhi.gov.tw/imu/imue1000" target="_blank" class="tool-link"
-                    title="開啟雲端藥歷系統 (另開新視窗)">雲端藥歷</a>
+                <a href="game.html" class="tool-link" style="color:#e67e22; border-color:#e67e22;" title="開啟藥物知識小遊戲">🎮 藥物遊戲</a>
+                <a href="https://www.micromedexsolutions.com/micromedex2/librarian/PFActionId/pf.HomePage?isToolPage=true&navitem=topHome" target="_blank" class="tool-link" title="Micromedex">Micromedex</a>
+                <a href="https://mcp.fda.gov.tw/im" target="_blank" class="tool-link" title="仿單查詢">仿單查詢</a>
+                <a href="https://www.nhi.gov.tw/ch/np-2505-1.html" target="_blank" class="tool-link" title="藥品給付">藥品給付</a>
+                <a href="https://info.nhi.gov.tw/INAE3000/INAE3000S01" target="_blank" class="tool-link" title="健保用藥">健保用藥</a>
+                <a href="https://medcloud2.nhi.gov.tw/imu/imue1000" target="_blank" class="tool-link" title="雲端藥歷">雲端藥歷</a>
                 <button class="btn btn-sm btn-primary ms-2" style="border-radius: 3rem; font-size: 0.75rem;"
-                    onclick="location.reload()" aria-label="重新整理頁面">🔄 重整</button>
+                    onclick="location.reload()" aria-label="重新整理">🔄 重整</button>
             </nav>
         </header>
 
         <div class="filter-panel">
             <div class="row g-3">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="globalSearch" class="fw-bold small mb-1">🔍 關鍵字搜尋</label>
-                    <input type="text" id="globalSearch" class="form-control form-control-sm" placeholder="代碼、簡碼或藥名...">
+                    <input type="text" id="globalSearch" class="form-control form-control-sm" placeholder="代碼、簡碼...">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="select-atc" class="fw-bold small mb-1">🧬 ATC 搜尋</label>
                     <select id="select-atc" class="form-select"></select>
                 </div>
@@ -203,13 +206,14 @@
                 <table id="drugTable" class="table table-hover align-middle" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th style="width: 8%;">醫令代碼</th>
-                            <th style="width: 30%;">藥品名稱 (英/中)</th>
-                            <th style="width: 5%;">劑型</th>
-                            <th style="width: 5%;">狀態</th>
-                            <th style="width: 10%;">ATC 代碼</th>
-                            <th style="width: 35%;">藥物作用</th>
-                            <th style="width: 7%;">資料庫</th>
+                            <th style="width:8%;">醫令代碼</th>
+                            <th style="width:29%;">藥品名稱 (英/中)</th>
+                            <th style="width:5%;">劑型</th>
+                            <th style="width:5%;">狀態</th>
+                            <th style="width:7%;">ATC 代碼</th>
+                            <th style="width:34%; color: white !important;">藥物作用</th>
+                            <th style="width:5%;">懷孕</th>
+                            <th style="width:7%;">資料庫</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -222,71 +226,90 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     <script>
-        // ✅ 這是 PWA 靈魂：註冊 Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker 註冊成功！', reg))
-                    .catch(err => console.log('Service Worker 註冊失敗：', err));
-            });
-        }
-
         $(document).ready(function () {
+            // 歐巴記得確認 GAS 那邊噴出來的資料結構有對齊喔！
             const API_URL = 'https://script.google.com/macros/s/AKfycbz5YDlqhcmUB6gShlKunB6EjT5CP6ML4udQJJRR7tIb2-7kMmhrOcR5RxHik-NBpJw0/exec';
+            const CACHE_KEY = 'ym_drug_cloud_v298';
+            const CACHE_TTL = 30 * 60 * 1000; // 30 分鐘快取
 
-            fetch(API_URL).then(res => res.json()).then(data => {
-                if (data.error) throw new Error(data.error);
-                $('#display-date').text('資料生成時間：' + (data.date || '未知'));
-                const atcSelect = $('#select-atc');
+            function loadCache() {
+                try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch (e) { return null; }
+            }
+            function saveCache(data) {
+                try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data })); } catch (e) { }
+            }
+
+            function renderPage(data) {
+                $('#display-date').text('資料日期：' + (data.date || '未知'));
+                var atcSelect = $('#select-atc');
                 atcSelect.empty().append('<option value="">全部 ATC 分類</option>');
-                data.atc.forEach(item => {
+                data.atc.forEach(function (item) {
                     atcSelect.append('<option value="' + item.c + '">' + item.l + ' (' + item.c + ')</option>');
                 });
                 atcSelect.select2({ theme: 'bootstrap-5', width: '100%' });
-
-                const decodedDrugs = data.drugs.map(item => ({ "a": item.a, "b": item.b, "c": item.c, "d": item.d, "e": item.e, "f": item.f, "g": item.g }));
-                initTable(decodedDrugs);
+                
+                // 確保包含了 h (懷孕等級)
+                var drugs = data.drugs.map(function (item) {
+                    return { a: item.a, b: item.b, c: item.c, d: item.d, e: item.e, f: item.f, g: item.g, h: item.h || '' };
+                });
+                initTable(drugs);
                 $('#loader-wrapper').fadeOut();
                 $('#table-content').fadeIn();
-            }).catch(err => {
-                $('#loader-wrapper h5').text('連線失敗。').addClass('text-danger');
-            });
+            }
+
+            var cached = loadCache();
+            if (cached && cached.data) {
+                renderPage(cached.data);
+                if (Date.now() - cached.ts > CACHE_TTL) {
+                    fetch(API_URL).then(function (r) { return r.json(); }).then(function (fresh) {
+                        if (!fresh.error) saveCache(fresh);
+                    }).catch(function () { });
+                }
+            } else {
+                fetch(API_URL).then(function (res) { return res.json(); }).then(function (data) {
+                    if (data.error) throw new Error(data.error);
+                    saveCache(data);
+                    renderPage(data);
+                }).catch(function () {
+                    $('#loader-wrapper h5').text('連線失敗，請確認網路。').addClass('text-danger');
+                });
+            }
 
             function initTable(drugData) {
                 var table = $('#drugTable').DataTable({
                     data: drugData,
-                    "pageLength": 15, "dom": 'rtip', "deferRender": true, "order": [],
-                    "language": { "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/zh-HANT.json" },
-                    "columns": [
+                    pageLength: 15, dom: 'rtip', deferRender: true, order: [],
+                    language: { url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/zh-HANT.json' },
+                    columns: [
                         { data: 'a', className: 'text-start' },
                         {
                             data: null, render: function (d, t, row) {
-                                return '<b>' + (row.b || "") + '</b><br><small class="text-secondary">' + (row.c || "") + '</small>';
+                                return '<b>' + (row.b || '') + '</b><br><small class="text-secondary">' + (row.c || '') + '</small>';
                             }
                         },
-                        { data: 'e', render: function (val) { return val ? val.substring(0, 2) : "其他"; }, className: 'text-center' },
+                        { data: 'e', render: function (val) { return val ? val.substring(0, 2) : '其他'; }, className: 'text-center' },
                         {
                             data: 'd', render: function (val) {
-                                var cls = val === '正常' ? 'bg-success' : 'bg-secondary';
-                                return '<span class="badge ' + cls + '">' + (val || "未知") + '</span>';
+                                return '<span class="badge ' + (val === '正常' ? 'bg-success' : 'bg-secondary') + '">' + (val || '未知') + '</span>';
                             }, className: 'text-center'
                         },
                         { data: 'f', className: 'text-start' },
-                        { data: 'g', defaultContent: "", className: 'drug-action-text' },
+                        { data: 'g', defaultContent: '', className: 'drug-action-text' },
+                        {
+                            data: 'h', render: function (val) {
+                                return val ? '<span class="preg-box">' + val + '</span>' : '';
+                            }, className: 'text-center'
+                        },
                         {
                             data: null, render: function (d, t, row) {
-                                return '<a href="http://hq-sso2-nvm/ESMC/Home/DetailPage?odr_code=' + row.a + '" target="_blank" class="detail-link" title="查詢代碼 ' + row.a + ' 詳細資訊">詳細</a>';
+                                return '<a href="http://hq-sso2-nvm/ESMC/Home/DetailPage?odr_code=' + row.a + '" target="_blank" class="detail-link">詳細</a>';
                             }, className: 'text-center'
                         }
                     ]
                 });
-
-                // 💡 建立按鈕組
-                setupFilterButtons(table, 2, "#dosage-btn-group", ["全部", "口服", "外用", "針劑", "眼用"], "全部");
-                setupFilterButtons(table, 3, "#status-btn-group", ["全部", "正常", "停用", "等待啟用", "缺料"], "正常");
-
+                setupFilterButtons(table, 2, '#dosage-btn-group', ['全部', '口服', '外用', '針劑', '眼用'], '全部');
+                setupFilterButtons(table, 3, '#status-btn-group', ['全部', '正常', '停用', '等待啟用', '缺料'], '正常');
                 $('#globalSearch').on('keyup', function () { table.search(this.value).draw(); });
                 $('#select-atc').on('change', function () {
                     var val = $(this).val();
@@ -295,23 +318,18 @@
             }
 
             function setupFilterButtons(api, colIdx, containerId, list, defaultVal) {
-                const container = $(containerId);
-                list.forEach(item => {
-                    const btn = $('<button type="button" class="btn-filter"></button>')
-                        .text(item)
-                        .attr('aria-pressed', item === defaultVal)
-                        .toggleClass('active', item === defaultVal)
+                var container = $(containerId);
+                list.forEach(function (item) {
+                    $('<button type="button" class="btn-filter"></button>')
+                        .text(item).toggleClass('active', item === defaultVal)
                         .on('click', function () {
-                            $(this).parent().find('.btn-filter').removeClass('active').attr('aria-pressed', 'false');
-                            $(this).addClass('active').attr('aria-pressed', 'true');
-                            let searchVal = item === "全部" ? "" : item;
-                            api.column(colIdx).search(searchVal ? '^' + searchVal + '$' : '', true, false).draw();
-                        });
-                    container.append(btn);
+                            $(this).parent().find('.btn-filter').removeClass('active');
+                            $(this).addClass('active');
+                            var v = item === '全部' ? '' : item;
+                            api.column(colIdx).search(v ? '^' + v + '$' : '', true, false).draw();
+                        }).appendTo(container);
                 });
-                if (defaultVal !== "全部") {
-                    api.column(colIdx).search('^' + defaultVal + '$', true, false).draw();
-                }
+                if (defaultVal !== '全部') api.column(colIdx).search('^' + defaultVal + '$', true, false).draw();
             }
         });
     </script>
