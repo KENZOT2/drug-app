@@ -152,6 +152,7 @@
             background-color: #fff;
             font-size: 0.85rem;
         }
+        .preg-mobile-badge { display: none !important; }
 
         /* 行動裝置版面 (RWD) 響應式優化 */
         @media (max-width: 768px) {
@@ -176,27 +177,35 @@
             
             /* Row 1: Code, Badges, Price */
             #drugTable td:nth-child(1) { display: inline-block; width: auto !important; font-weight: 800; color: #2c3e50; font-size: 0.9rem; margin-right: 0.5rem; }
-            #drugTable td:nth-child(3), #drugTable td:nth-child(4), #drugTable td:nth-child(8) { display: inline-block; width: auto !important; margin-right: 0.3rem; }
+            #drugTable td:nth-child(3), #drugTable td:nth-child(4) { display: inline-block; width: auto !important; margin-right: 0.3rem; }
+            #drugTable td:nth-child(8) { display: none !important; } /* 隱藏原本手機版的獨立懷孕欄位 */
+            
             .preg-box { width: auto; height: auto; line-height: normal; padding: 0.1rem 0.35rem; font-size: 0.75rem; border: 1px solid #dc3545; color: #dc3545; background-color: #fff8f8; border-radius: 3px; }
+            .preg-mobile-badge { display: inline-block !important; margin-left: 0.5rem; vertical-align: middle; }
+            
             #drugTable td:nth-child(5) { float: right; display: inline-block; width: auto !important; margin-top: -0.2rem; }
             #drugTable td:nth-child(5) span { font-size: 1rem !important; color: #e74c3c !important; font-weight: bold; }
             
             /* Row 2: Drug Name (Clear float) */
-            #drugTable td:nth-child(2) { clear: both; display: block; padding-top: 0.4rem !important; border-bottom: 1px solid #f1f3f5 !important; padding-bottom: 0.4rem !important; margin-bottom: 0.4rem; }
-            #drugTable td:nth-child(2) b { font-size: 0.95rem; color: #333; display: block; }
-            #drugTable td:nth-child(2) small { font-size: 0.85rem; color: #666; display: block; margin-top: 0.15rem; }
+            #drugTable td:nth-child(2) { clear: both; display: block; padding-top: 0.3rem !important; border-bottom: 1px solid #f1f3f5 !important; padding-bottom: 0.3rem !important; margin-bottom: 0.3rem; }
+            #drugTable td:nth-child(2) b { font-size: 0.95rem; color: #333; display: block; line-height: 1.25; }
+            #drugTable td:nth-child(2) small { font-size: 0.85rem; color: #666; display: block; margin-top: 0.08rem; line-height: 1.25; }
             
-            /* Row 3: ATC */
+            /* Row 3: ATC (合併成單行) */
             #drugTable td:nth-child(6) { display: block; font-size: 0.8rem; color: #555; }
             #drugTable td:nth-child(6):before { content: "🧬 ATC："; font-weight: bold; color: #7f8c8d; }
             #drugTable td:nth-child(6) b { font-weight: bold; color: #333; }
+            #drugTable td:nth-child(6) br { display: none; }
+            #drugTable td:nth-child(6) small { display: inline-block; margin-left: 0.25rem; color: #555 !important; }
+            #drugTable td:nth-child(6) small:before { content: " ("; }
+            #drugTable td:nth-child(6) small:after { content: ")"; }
             
             /* Row 4: Action */
-            #drugTable td:nth-child(7) { display: block; font-size: 0.8rem; color: #555; margin-top: 0.2rem; line-height: 1.4; }
+            #drugTable td:nth-child(7) { display: block; font-size: 0.8rem; color: #555; margin-top: 0.15rem; line-height: 1.35; }
             #drugTable td:nth-child(7):before { content: "🎯 作用："; font-weight: bold; color: #7f8c8d; }
             
             /* Row 5: Details */
-            #drugTable td:nth-child(9) { display: block; text-align: right !important; margin-top: 0.3rem; border-top: 1px solid #f1f3f5 !important; padding-top: 0.3rem !important; }
+            #drugTable td:nth-child(9) { display: block; text-align: right !important; margin-top: 0.2rem; border-top: 1px solid #f1f3f5 !important; padding-top: 0.2rem !important; }
             .detail-link { font-size: 0.8rem; }
         }
     </style>
@@ -361,7 +370,11 @@
                         { data: 'a', className: 'text-start' },
                         {
                             data: null, render: function (d, t, row) {
-                                return '<b>' + (row.b || '') + '</b><br><small class="text-secondary">' + (row.c || '') + '</small>';
+                                var nameHtml = '<b>' + (row.b || '') + '</b>';
+                                var chtName = row.c || '';
+                                var preg = row.h || '';
+                                var pregHtml = preg ? '<span class="preg-box preg-mobile-badge float-end">' + preg + '</span>' : '';
+                                return nameHtml + '<div class="d-flex justify-content-between align-items-center mt-1"><small class="text-secondary">' + chtName + '</small>' + pregHtml + '</div>';
                             }
                         },
                         { data: 'e', render: function (val) { return val ? val.substring(0, 2) : '其他'; }, className: 'text-center' },
