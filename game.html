@@ -37,6 +37,7 @@
             align-items: center;
             justify-content: center;
             padding: 1rem;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* ── 載入 ── */
@@ -357,10 +358,39 @@
                 padding: 1.25rem;
             }
         }
+
+        /* ── 主題切換變數 ── */
+        body.theme-dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --border: #334155;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --primary: #4f46e5;
+        }
+        body.theme-light {
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --border: #cbd5e1;
+            --text: #0f172a;
+            --muted: #64748b;
+            --primary: #4f46e5;
+        }
+        body.theme-sakura {
+            --bg: #fff1f2;
+            --card: #ffffff;
+            --border: #fbcfe8;
+            --text: #831843;
+            --muted: #db2777;
+            --primary: #db2777;
+        }
     </style>
 </head>
 
-<body>
+<body class="theme-dark">
+
+    <!-- 主題切換按鈕 -->
+    <button id="theme-toggle-btn" onclick="toggleTheme()" aria-label="切換主題" style="position: fixed; top: 1rem; right: 1rem; z-index: 1000; background: var(--card); border: 2px solid var(--border); color: var(--text); border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.25rem; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">🌌</button>
 
     <!-- 載入畫面 -->
     <div id="loading-screen">
@@ -715,6 +745,36 @@
             }
             return a;
         }
+
+        // ── 主題切換 ──────────────────────────────────────
+        var currentThemeIdx = 0;
+        const themes = ['theme-dark', 'theme-light', 'theme-sakura'];
+        const themeIcons = ['🌌', '☀️', '🌸'];
+
+        function toggleTheme() {
+            document.body.classList.remove(themes[currentThemeIdx]);
+            currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+            document.body.classList.add(themes[currentThemeIdx]);
+            document.getElementById('theme-toggle-btn').textContent = themeIcons[currentThemeIdx];
+            
+            try { localStorage.setItem('ym_game_theme', currentThemeIdx); } catch(e) {}
+        }
+
+        // 初始化主題
+        (function() {
+            try {
+                var saved = localStorage.getItem('ym_game_theme');
+                if (saved !== null) {
+                    currentThemeIdx = parseInt(saved, 10);
+                    document.body.className = themes[currentThemeIdx];
+                    document.getElementById('theme-toggle-btn').textContent = themeIcons[currentThemeIdx];
+                } else {
+                    document.body.className = themes[0];
+                }
+            } catch(e) {
+                document.body.className = themes[0];
+            }
+        })();
 
         // 啟動
         loadData();
