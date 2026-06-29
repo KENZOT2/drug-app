@@ -211,13 +211,14 @@
                     <thead>
                         <tr>
                             <th style="width:7%;">醫令代碼</th>
-                            <th style="width:26%;">藥品名稱 (英/中)</th>
+                            <th style="width:24%;">藥品名稱 (英/中)</th>
                             <th style="width:5%;">劑型</th>
                             <th style="width:6%;">狀態</th>
-                            <th style="width:13%;">ATC 代碼</th>
-                            <th style="width:33%; color: white !important;">藥物作用</th>
+                            <th style="width:7%;">自費單價</th>
+                            <th style="width:11%;">ATC 代碼</th>
+                            <th style="width:31%; color: white !important;">藥物作用</th>
                             <th style="width:4%;">懷孕</th>
-                            <th style="width:6%;">資料庫</th>
+                            <th style="width:5%;">資料庫</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -270,7 +271,7 @@
                 }
                 // 轉換藥品陣列，加入 i (處理後的 ATC 中文說明)
                 var drugs = data.drugs.map(function (item) {
-                    return { a: item.a, b: item.b, c: item.c, d: item.d, e: item.e, f: item.f, g: item.g, h: item.h || '', i: item.i || findAtcLabel(item.f || '') };
+                    return { a: item.a, b: item.b, c: item.c, d: item.d, e: item.e, f: item.f, g: item.g, h: item.h || '', i: item.i || findAtcLabel(item.f || ''), j: item.j || '' };
                 });
                 initTable(drugs, data.atc);
                 $('#loader-wrapper').fadeOut();
@@ -314,6 +315,9 @@
                                 return '<span class="badge ' + (val === '正常' ? 'bg-success' : 'bg-secondary') + '">' + (val || '未知') + '</span>';
                             }, className: 'text-center'
                         },
+                        { data: 'j', render: function (val) {
+                            return val ? '<span style="font-weight: bold; color: #e74c3c;">$' + parseFloat(val).toFixed(2) + '</span>' : '-';
+                        }, className: 'text-end' },
                         { data: null, render: function (d, t, row) {
                             // ATC 代碼欄位：filter/sort 回傳純文字，display 才回傳雙行 HTML
                             var code = row.f || '';
@@ -342,7 +346,7 @@
                 $('#globalSearch').on('keyup', function () { table.search(this.value).draw(); });
                 $('#select-atc').on('change', function () {
                     var val = $(this).val();
-                    table.column(4).search(val ? '^' + $.fn.dataTable.util.escapeRegex(val) : '', true, false).draw();
+                    table.column(5).search(val ? '^' + $.fn.dataTable.util.escapeRegex(val) : '', true, false).draw();
                 });
             }
 
