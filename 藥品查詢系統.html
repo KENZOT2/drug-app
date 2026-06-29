@@ -284,7 +284,11 @@
                 if (Date.now() - cached.ts > CACHE_TTL) {
                     fetch(API_URL).then(function (r) { return r.json(); }).then(function (fresh) {
                         if (!fresh.error) saveCache(fresh);
-                    }).catch(function () { });
+                    }).catch(function () {
+                        fetch('data.json').then(function (r) { return r.json(); }).then(function (fresh) {
+                            saveCache(fresh);
+                        }).catch(function () { });
+                    });
                 }
             } else {
                 fetch(API_URL).then(function (res) { return res.json(); }).then(function (data) {
@@ -292,7 +296,11 @@
                     saveCache(data);
                     renderPage(data);
                 }).catch(function () {
-                    $('#loader-wrapper h5').text('連線失敗，請確認網路。').addClass('text-danger');
+                    fetch('data.json').then(function (res) { return res.json(); }).then(function (data) {
+                        renderPage(data);
+                    }).catch(function () {
+                        $('#loader-wrapper h5').text('連線失敗，請確認網路（或使用單機版）。').addClass('text-danger');
+                    });
                 });
             }
 
