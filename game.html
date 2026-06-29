@@ -81,7 +81,7 @@
 
         .mode-cards {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1rem;
         }
 
@@ -384,6 +384,11 @@
                 <h3>模式二：找正常藥</h3>
                 <p>相同 ATC 分類中，哪一個藥品目前狀態為「正常」可開立？</p>
             </div>
+            <div class="mode-card" onclick="startGame(3)">
+                <div class="icon">🎯</div>
+                <h3>模式三：猜作用</h3>
+                <p>看藥物名稱，從 4 個選項中選出正確的藥物作用。</p>
+            </div>
         </div>
         <a href="index.html" class="back-link">← 回到藥品查詢系統</a>
     </div>
@@ -501,10 +506,14 @@
                 // 模式一：需要有藥物作用的藥品
                 if (drugsWithAction.length < 4) { alert('藥物作用資料不足，無法開始！'); return; }
                 questions = shuffle(drugsWithAction).slice(0, TOTAL_Q);
-            } else {
+            } else if (mode === 2) {
                 // 模式二：需要有正常 + 非正常藥品
                 if (normalDrugs.length < 1 || abnormalDrugs.length < 3) { alert('狀態資料不足，無法開始！'); return; }
                 questions = buildMode2Questions(TOTAL_Q);
+            } else if (mode === 3) {
+                // 模式三：需要有藥物作用的藥品
+                if (drugsWithAction.length < 4) { alert('藥物作用資料不足，無法開始！'); return; }
+                questions = shuffle(drugsWithAction).slice(0, TOTAL_Q);
             }
 
             document.getElementById('q-total').textContent = questions.length;
@@ -512,7 +521,7 @@
             document.getElementById('result-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'block';
             document.getElementById('q-label').textContent =
-                mode === 1 ? '模式一 ─ 看藥物作用 → 猜藥名' : '模式二 ─ 找出狀態「正常」的藥品';
+                mode === 1 ? '模式一 ─ 看藥物作用 → 猜藥名' : (mode === 2 ? '模式二 ─ 找出狀態「正常」的藥品' : '模式三 ─ 看藥名 → 猜藥物作用');
 
             showQuestion();
         }
@@ -562,7 +571,7 @@
                     );
                     grid.appendChild(btn);
                 });
-            } else {
+            } else if (currentMode === 2) {
                 // ── 模式二 ──
                 var correct = q.correct;
                 var distractors = q.distractors;
@@ -572,10 +581,23 @@
 
                 var opts2 = shuffle([correct].concat(distractors));
                 opts2.forEach(function (opt) {
-                    var statusText = opt.d ? '【' + opt.d + '】' : '';
                     var btn = makeOptBtn(
                         '<b>' + (opt.b || opt.a) + '</b> ' + (opt.c ? '<br><span style="font-size:0.8rem;font-weight:400;color:var(--muted)">' + opt.c + '</span>' : ''),
                         function () { checkAnswer(opt.a === correct.a, q, btn, 2); }
+                    );
+                    grid.appendChild(btn);
+                });
+            } else if (currentMode === 3) {
+                // ── 模式三 ──
+                document.getElementById('q-text').innerHTML = '<span style="color:#818cf8;font-size:1.3rem;font-weight:900;">' + (q.b || q.a) + '</span>' + (q.c ? '<br><small style="color:var(--muted);font-weight:normal;font-size:0.9rem;">' + q.c + '</small>' : '');
+                document.getElementById('q-hint').textContent = 'ATC：' + (q.f || '—');
+                
+                var others = shuffle(drugsWithAction.filter(function (d) { return d.a !== q.a && d.g !== q.g; })).slice(0, 3);
+                var opts3 = shuffle([q].concat(others));
+                opts3.forEach(function (opt) {
+                    var btn = makeOptBtn(
+                        opt.g,
+                        function () { checkAnswer(opt.a === q.a, q, btn, 3); }
                     );
                     grid.appendChild(btn);
                 });
@@ -626,10 +648,14 @@
 
         function showResult(isCorrect, q, mode) {
             // 找到正確答案按鈕並標色
-            var correctName = mode === 1 ? (q.b || q.a) : (q.correct.b || q.correct.a);
+            var correctName = mode === 1 ? (q.b || q.a) : (mode === 2 ? (q.correct.b || q.correct.a) : q.g);
             document.querySelectorAll('.opt-btn').forEach(function (b) {
-                var bName = b.querySelector('b');
-                if (bName && bName.textContent.trim() === correctName.trim()) b.classList.add('correct');
+                if (mode === 3) {
+                    if (b.textContent.trim() === correctName.trim()) b.classList.add('correct');
+                } else {
+                    var bName = b.querySelector('b');
+                    if (bName && bName.textContent.trim() === correctName.trim()) b.classList.add('correct');
+                }
                 b.disabled = true;
             });
 
@@ -644,11 +670,15 @@
                 area.innerHTML = (isCorrect ? '✅ 正確！' : '❌ 答錯了！') +
                     '<br><b>' + (q.b || q.a) + '</b>' + (q.c ? '（' + q.c + '）' : '') +
                     '<br><span style="color:var(--muted);font-size:0.82rem;">' + (q.g || '') + '</span>';
-            } else {
+            } else if (mode === 2) {
                 var c = q.correct;
                 area.innerHTML = (isCorrect ? '✅ 正確！' : '❌ 答錯了！') +
                     '<br>正常可開立的藥品是：<b>' + (c.b || c.a) + '</b>' + (c.c ? '（' + c.c + '）' : '') +
                     (c.g ? '<br><span style="color:var(--muted);font-size:0.82rem;">' + c.g + '</span>' : '');
+            } else if (mode === 3) {
+                area.innerHTML = (isCorrect ? '✅ 正確！' : '❌ 答錯了！') +
+                    '<br><b>' + (q.b || q.a) + '</b> 的作用是：' +
+                    '<br><span style="color:#818cf8;font-weight:bold;">' + q.g + '</span>';
             }
 
             area.style.display = 'block';
