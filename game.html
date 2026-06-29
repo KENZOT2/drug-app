@@ -422,8 +422,8 @@
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbz5YDlqhcmUB6gShlKunB6EjT5CP6ML4udQJJRR7tIb2-7kMmhrOcR5RxHik-NBpJw0/exec';
-        const CACHE_KEY = 'ym_drug_v297';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyr8rpN0eVxomHJu_ZfNeBExJIfsz6Ptkb8kM7uGln17d5kdfyiMYgA8QUQ3BUhbaIN/exec';
+        const CACHE_KEY = 'ym_drug_cloud_v298';
         const TOTAL_Q = 10;
         const TIME_LIMIT = 15;
 
@@ -442,14 +442,18 @@
 
         // ── 載入資料 ──────────────────────────────────────
         function loadData() {
-            try {
-                var cached = JSON.parse(localStorage.getItem(CACHE_KEY));
-                if (cached && cached.data && cached.data.drugs && cached.data.drugs.length > 0) {
-                    processData(cached.data.drugs);
-                    showModeSelect();
-                    return;
-                }
-            } catch (e) { }
+            // 嘗試多個快取金鑰
+            const keys = ['ym_drug_cloud_v298', 'ym_drug_v297'];
+            for (var ki = 0; ki < keys.length; ki++) {
+                try {
+                    var cached = JSON.parse(localStorage.getItem(keys[ki]));
+                    if (cached && cached.data && cached.data.drugs && cached.data.drugs.length > 0) {
+                        processData(cached.data.drugs);
+                        showModeSelect();
+                        return;
+                    }
+                } catch (e) { }
+            }
 
             fetch(API_URL).then(function (r) { return r.json(); }).then(function (data) {
                 if (data.error) throw new Error(data.error);
@@ -457,8 +461,14 @@
                 processData(data.drugs);
                 showModeSelect();
             }).catch(function () {
-                document.getElementById('loading-screen').innerHTML =
-                    '<h2 style="color:#ef4444;">⚠️ 載入失敗</h2><p style="color:var(--muted)">請重新整理頁面</p>';
+                // 雲端載入失敗，改嘗試讀取本地 data.json 備援
+                fetch('data.json').then(function (r) { return r.json(); }).then(function (data) {
+                    processData(data.drugs);
+                    showModeSelect();
+                }).catch(function () {
+                    document.getElementById('loading-screen').innerHTML =
+                        '<h2 style="color:#ef4444;">⚠️ 載入失敗</h2><p style="color:var(--muted)">請檢查網路連線或確保目錄下有 data.json 檔案</p>';
+                });
             });
         }
 
