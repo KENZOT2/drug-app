@@ -178,7 +178,7 @@
             /* Row 1: Code, Badges, Price */
             #drugTable td:nth-child(1) { display: inline-block; width: auto !important; font-weight: 800; color: #2c3e50; font-size: 0.9rem; margin-right: 0.5rem; }
             #drugTable td:nth-child(3), #drugTable td:nth-child(4) { display: inline-block; width: auto !important; margin-right: 0.3rem; }
-            #drugTable td:nth-child(8) { display: none !important; } /* 隱藏原本手機版的獨立懷孕欄位 */
+            #drugTable td:nth-child(9) { display: none !important; } /* 隱藏原本手機版的獨立懷孕欄位 */
             
             .preg-box { width: auto; height: auto; line-height: normal; padding: 0.1rem 0.35rem; font-size: 0.75rem; border: 1px solid #dc3545; color: #dc3545; background-color: #fff8f8; border-radius: 3px; }
             .preg-mobile-badge { display: inline-block !important; margin-left: 0.5rem; vertical-align: middle; }
@@ -191,21 +191,24 @@
             #drugTable td:nth-child(2) b { font-size: 0.95rem; color: #333; display: block; line-height: 1.25; }
             #drugTable td:nth-child(2) small { font-size: 0.85rem; color: #666; display: block; margin-top: 0.08rem; line-height: 1.25; }
             
+            /* Row 2.5: 替代藥 (新) */
+            #drugTable td:nth-child(6) { display: block; font-size: 0.8rem; color: #555; margin-bottom: 0.15rem; }
+            #drugTable td:nth-child(6):empty { display: none !important; }
+            
             /* Row 3: ATC (合併成單行) */
-            #drugTable td:nth-child(6) { display: block; font-size: 0.8rem; color: #555; }
-            #drugTable td:nth-child(6):before { content: "🧬 ATC："; font-weight: bold; color: #7f8c8d; }
-            #drugTable td:nth-child(6) b { font-weight: bold; color: #333; }
-            #drugTable td:nth-child(6) br { display: none; }
-            #drugTable td:nth-child(6) small { display: inline-block; margin-left: 0.25rem; color: #555 !important; }
-            #drugTable td:nth-child(6) small:before { content: " ("; }
-            #drugTable td:nth-child(6) small:after { content: ")"; }
+            #drugTable td:nth-child(7) { display: block; font-size: 0.8rem; color: #555; }
+            #drugTable td:nth-child(7) b { font-weight: bold; color: #333; }
+            #drugTable td:nth-child(7) br { display: none; }
+            #drugTable td:nth-child(7) small { display: inline-block; margin-left: 0.25rem; color: #555 !important; }
+            #drugTable td:nth-child(7) small:before { content: " ("; }
+            #drugTable td:nth-child(7) small:after { content: ")"; }
             
             /* Row 4: Action */
-            #drugTable td:nth-child(7) { display: block; font-size: 0.8rem; color: #555; margin-top: 0.15rem; line-height: 1.35; }
-            #drugTable td:nth-child(7):before { content: "🎯 作用："; font-weight: bold; color: #7f8c8d; }
+            #drugTable td:nth-child(8) { display: block; font-size: 0.8rem; color: #555; margin-top: 0.15rem; line-height: 1.35; }
+            #drugTable td:nth-child(8):before { content: "🎯 作用："; font-weight: bold; color: #7f8c8d; }
             
             /* Row 5: Details */
-            #drugTable td:nth-child(9) { display: block; text-align: right !important; margin-top: 0.2rem; border-top: 1px solid #f1f3f5 !important; padding-top: 0.2rem !important; }
+            #drugTable td:nth-child(10) { display: block; text-align: right !important; margin-top: 0.2rem; border-top: 1px solid #f1f3f5 !important; padding-top: 0.2rem !important; }
             .detail-link { font-size: 0.8rem; }
         }
     </style>
@@ -267,12 +270,13 @@
                     <thead>
                         <tr>
                             <th style="width:7%;">醫令代碼</th>
-                            <th style="width:24%;">藥品名稱 (英/中)</th>
+                            <th style="width:22%;">藥品名稱 (英/中)</th>
                             <th style="width:5%;">劑型</th>
                             <th style="width:6%;">狀態</th>
-                            <th style="width:7%;">單價</th>
-                            <th style="width:11%;">ATC 代碼</th>
-                            <th style="width:31%; color: white !important;">藥物作用</th>
+                            <th style="width:6%;">單價</th>
+                            <th style="width:12%;">替代藥</th>
+                            <th style="width:9%;">ATC 代碼</th>
+                            <th style="width:26%; color: white !important;">藥物作用</th>
                             <th style="width:4%;">懷孕</th>
                             <th style="width:5%;">資料庫</th>
                         </tr>
@@ -327,7 +331,7 @@
                 }
                 // 轉換藥品陣列，加入 i (處理後的 ATC 中文說明)
                 var drugs = data.drugs.map(function (item) {
-                    return { a: item.a, b: item.b, c: item.c, d: item.d, e: item.e, f: item.f, g: item.g, h: item.h || '', i: item.i || findAtcLabel(item.f || ''), j: item.j || '' };
+                    return { a: item.a, b: item.b, c: item.c, d: item.d, e: item.e, f: item.f, g: item.g, h: item.h || '', i: item.i || findAtcLabel(item.f || ''), j: item.j || '', k: item.k || '' };
                 });
                 initTable(drugs, data.atc);
                 $('#loader-wrapper').fadeOut();
@@ -386,6 +390,13 @@
                         { data: 'j', render: function (val) {
                             return val ? '<span style="font-weight: bold; color: #e74c3c;">$' + parseFloat(val).toFixed(2) + '</span>' : '-';
                         }, className: 'text-end' },
+                        { data: 'k', render: function (val, t, row) {
+                            if (row.d === '正常') return '';
+                            var text = val || '無設定';
+                            var color = (val === '設定循環') ? '#dc3545' : (val ? '#d35400' : '#6c757d');
+                            var fw = (val === '設定循環' || val) ? 'bold' : 'normal';
+                            return '<span class="d-md-none fw-bold text-secondary">🔄 替代：</span><span style="color:' + color + '; font-weight:' + fw + ';">' + text + '</span>';
+                        }, className: 'text-start' },
                         { data: null, render: function (d, t, row) {
                             // ATC 代碼欄位：filter/sort 回傳純文字，display 才回傳雙行 HTML
                             var code = row.f || '';
