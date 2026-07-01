@@ -270,13 +270,13 @@
                     <thead>
                         <tr>
                             <th style="width:7%;">醫令代碼</th>
-                            <th style="width:22%;">藥品名稱 (英/中)</th>
+                            <th style="width:25%;">藥品名稱 (英/中)</th>
                             <th style="width:5%;">劑型</th>
                             <th style="width:6%;">狀態</th>
-                            <th style="width:6%;">單價</th>
-                            <th style="width:12%;">替代藥</th>
+                            <th style="width:5%;">單價</th>
+                            <th style="width:7%;">替代藥</th>
                             <th style="width:9%;">ATC 代碼</th>
-                            <th style="width:26%; color: white !important;">藥物作用</th>
+                            <th style="width:27%; color: white !important;">藥物作用</th>
                             <th style="width:4%;">懷孕</th>
                             <th style="width:5%;">資料庫</th>
                         </tr>
@@ -388,7 +388,7 @@
                             }, className: 'text-center'
                         },
                         { data: 'j', render: function (val) {
-                            return val ? '<span style="font-weight: bold; color: #e74c3c;">$' + parseFloat(val).toFixed(2) + '</span>' : '-';
+                            return val ? '$' + parseFloat(val).toFixed(2) : '-';
                         }, className: 'text-end' },
                         { data: 'k', render: function (val, t, row) {
                             if (row.d === '正常') return '';
