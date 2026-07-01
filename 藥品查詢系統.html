@@ -155,62 +155,60 @@
         .preg-mobile-badge { display: none !important; }
 
         /* 行動裝置版面 (RWD) 響應式優化 */
-        @media (max-width: 768px) {
-            .main-container { width: 98%; margin: 0.5rem auto; padding: 0.75rem; }
-            header { flex-direction: column; align-items: stretch !important; margin-bottom: 0.75rem !important; }
-            header h1 { font-size: 1.4rem !important; }
-            header > div { margin-bottom: 0.5rem; }
-            .header-tools { display: flex; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.4rem; gap: 0.4rem; -webkit-overflow-scrolling: touch; }
-            .header-tools::-webkit-scrollbar { height: 4px; }
-            .header-tools::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-            .tool-link { flex: 0 0 auto; padding: 0.25rem 0.6rem; font-size: 0.75rem; }
-            .filter-panel { padding: 0.75rem; margin-bottom: 0.75rem; }
-            .filter-panel label { font-size: 0.8rem !important; }
-            .filter-panel .row { --bs-gutter-y: 0.5rem; }
-            .btn-filter { font-size: 0.75rem; padding: 0.2rem 0.6rem; }
-            
-            /* 表格卡片化 */
-            #drugTable thead { display: none; }
-            #drugTable, #drugTable tbody, #drugTable tr, #drugTable td { display: block; width: 100% !important; }
-            #drugTable tbody tr { background: #fff; margin-bottom: 0.75rem; border-radius: 0.5rem; padding: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e9ecef; }
-            #drugTable td { border: none !important; padding: 0.2rem 0 !important; text-align: left !important; }
-            
-            /* Row 1: Code, Badges, Price */
-            #drugTable td:nth-child(1) { display: inline-block; width: auto !important; font-weight: 800; color: #2c3e50; font-size: 0.9rem; margin-right: 0.5rem; }
-            #drugTable td:nth-child(3), #drugTable td:nth-child(4) { display: inline-block; width: auto !important; margin-right: 0.3rem; }
-            #drugTable td:nth-child(9) { display: none !important; } /* 隱藏原本手機版的獨立懷孕欄位 */
-            
-            .preg-box { width: auto; height: auto; line-height: normal; padding: 0.1rem 0.35rem; font-size: 0.75rem; border: 1px solid #dc3545; color: #dc3545; background-color: #fff8f8; border-radius: 3px; }
-            .preg-mobile-badge { display: inline-block !important; margin-left: 0.5rem; vertical-align: middle; }
-            
-            #drugTable td:nth-child(5) { float: right; display: inline-block; width: auto !important; margin-top: -0.2rem; }
-            #drugTable td:nth-child(5) span { font-size: 1rem !important; color: #e74c3c !important; font-weight: bold; }
-            
-            /* Row 2: Drug Name (Clear float) */
-            #drugTable td:nth-child(2) { clear: both; display: block; padding-top: 0.3rem !important; border-bottom: 1px solid #f1f3f5 !important; padding-bottom: 0.3rem !important; margin-bottom: 0.3rem; }
-            #drugTable td:nth-child(2) b { font-size: 0.95rem; color: #333; display: block; line-height: 1.25; }
-            #drugTable td:nth-child(2) small { font-size: 0.85rem; color: #666; display: block; margin-top: 0.08rem; line-height: 1.25; }
-            
-            /* Row 2.5: 替代藥 (新) */
-            #drugTable td:nth-child(6) { display: block; font-size: 0.8rem; color: #555; margin-bottom: 0.15rem; }
-            #drugTable td:nth-child(6):empty { display: none !important; }
-            
-            /* Row 3: ATC (合併成單行) */
-            #drugTable td:nth-child(7) { display: block; font-size: 0.8rem; color: #555; }
-            #drugTable td:nth-child(7) b { font-weight: bold; color: #333; }
-            #drugTable td:nth-child(7) br { display: none; }
-            #drugTable td:nth-child(7) small { display: inline-block; margin-left: 0.25rem; color: #555 !important; }
-            #drugTable td:nth-child(7) small:before { content: " ("; }
-            #drugTable td:nth-child(7) small:after { content: ")"; }
-            
-            /* Row 4: Action */
-            #drugTable td:nth-child(8) { display: block; font-size: 0.8rem; color: #555; margin-top: 0.15rem; line-height: 1.35; }
-            #drugTable td:nth-child(8):before { content: "🎯 作用："; font-weight: bold; color: #7f8c8d; }
-            
-            /* Row 5: Details */
-            #drugTable td:nth-child(10) { display: block; text-align: right !important; margin-top: 0.2rem; border-top: 1px solid #f1f3f5 !important; padding-top: 0.2rem !important; }
-            .detail-link { font-size: 0.8rem; }
-        }
+        body.layout-mobile .main-container { width: 98%; margin: 0.5rem auto; padding: 0.75rem; }
+        body.layout-mobile header { flex-direction: column; align-items: stretch !important; margin-bottom: 0.75rem !important; }
+        body.layout-mobile header h1 { font-size: 1.4rem !important; }
+        body.layout-mobile header > div { margin-bottom: 0.5rem; }
+        body.layout-mobile .header-tools { display: flex; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.4rem; gap: 0.4rem; -webkit-overflow-scrolling: touch; }
+        body.layout-mobile .header-tools::-webkit-scrollbar { height: 4px; }
+        body.layout-mobile .header-tools::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        body.layout-mobile .tool-link { flex: 0 0 auto; padding: 0.25rem 0.6rem; font-size: 0.75rem; }
+        body.layout-mobile .filter-panel { padding: 0.75rem; margin-bottom: 0.75rem; }
+        body.layout-mobile .filter-panel label { font-size: 0.8rem !important; }
+        body.layout-mobile .filter-panel .row { --bs-gutter-y: 0.5rem; }
+        body.layout-mobile .btn-filter { font-size: 0.75rem; padding: 0.2rem 0.6rem; }
+        
+        /* 表格卡片化 */
+        body.layout-mobile #drugTable thead { display: none; }
+        body.layout-mobile #drugTable, body.layout-mobile #drugTable tbody, body.layout-mobile #drugTable tr, body.layout-mobile #drugTable td { display: block; width: 100% !important; }
+        body.layout-mobile #drugTable tbody tr { background: #fff; margin-bottom: 0.75rem; border-radius: 0.5rem; padding: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e9ecef; }
+        body.layout-mobile #drugTable td { border: none !important; padding: 0.2rem 0 !important; text-align: left !important; }
+        
+        /* Row 1: Code, Badges, Price */
+        body.layout-mobile #drugTable td:nth-child(1) { display: inline-block; width: auto !important; font-weight: 800; color: #2c3e50; font-size: 0.9rem; margin-right: 0.5rem; }
+        body.layout-mobile #drugTable td:nth-child(3), body.layout-mobile #drugTable td:nth-child(4) { display: inline-block; width: auto !important; margin-right: 0.3rem; }
+        body.layout-mobile #drugTable td:nth-child(9) { display: none !important; } /* 隱藏原本手機版的獨立懷孕欄位 */
+        
+        body.layout-mobile .preg-box { width: auto; height: auto; line-height: normal; padding: 0.1rem 0.35rem; font-size: 0.75rem; border: 1px solid #dc3545; color: #dc3545; background-color: #fff8f8; border-radius: 3px; }
+        body.layout-mobile .preg-mobile-badge { display: inline-block !important; margin-left: 0.5rem; vertical-align: middle; }
+        
+        body.layout-mobile #drugTable td:nth-child(5) { float: right; display: inline-block; width: auto !important; margin-top: -0.2rem; }
+        body.layout-mobile #drugTable td:nth-child(5) span { font-size: 1rem !important; color: #e74c3c !important; font-weight: bold; }
+        
+        /* Row 2: Drug Name (Clear float) */
+        body.layout-mobile #drugTable td:nth-child(2) { clear: both; display: block; padding-top: 0.3rem !important; border-bottom: 1px solid #f1f3f5 !important; padding-bottom: 0.3rem !important; margin-bottom: 0.3rem; }
+        body.layout-mobile #drugTable td:nth-child(2) b { font-size: 0.95rem; color: #333; display: block; line-height: 1.25; }
+        body.layout-mobile #drugTable td:nth-child(2) small { font-size: 0.85rem; color: #666; display: block; margin-top: 0.08rem; line-height: 1.25; }
+        
+        /* Row 2.5: 替代藥 (新) */
+        body.layout-mobile #drugTable td:nth-child(6) { display: block; font-size: 0.8rem; color: #555; margin-bottom: 0.15rem; }
+        body.layout-mobile #drugTable td:nth-child(6):empty { display: none !important; }
+        
+        /* Row 3: ATC (合併成單行) */
+        body.layout-mobile #drugTable td:nth-child(7) { display: block; font-size: 0.8rem; color: #555; }
+        body.layout-mobile #drugTable td:nth-child(7) b { font-weight: bold; color: #333; }
+        body.layout-mobile #drugTable td:nth-child(7) br { display: none; }
+        body.layout-mobile #drugTable td:nth-child(7) small { display: inline-block; margin-left: 0.25rem; color: #555 !important; }
+        body.layout-mobile #drugTable td:nth-child(7) small:before { content: " ("; }
+        body.layout-mobile #drugTable td:nth-child(7) small:after { content: ")"; }
+        
+        /* Row 4: Action */
+        body.layout-mobile #drugTable td:nth-child(8) { display: block; font-size: 0.8rem; color: #555; margin-top: 0.15rem; line-height: 1.35; }
+        body.layout-mobile #drugTable td:nth-child(8):before { content: "🎯 作用："; font-weight: bold; color: #7f8c8d; }
+        
+        /* Row 5: Details */
+        body.layout-mobile #drugTable td:nth-child(10) { display: block; text-align: right !important; margin-top: 0.2rem; border-top: 1px solid #f1f3f5 !important; padding-top: 0.2rem !important; }
+        body.layout-mobile .detail-link { font-size: 0.8rem; }
     </style>
 </head>
 
@@ -232,6 +230,7 @@
             </div>
             <nav class="header-tools" aria-label="外部工具連結">
 
+                <button id="btn-toggle-layout" class="tool-link" style="color:#0d6efd; border-color:#0d6efd;" title="切換手機/電腦版介面">📱 手機/電腦版</button>
                 <a href="\\tpech.gov.tw\fileserver6\院區共用\陽明院區\葵花寶典-醫療資訊-藥品相關資訊\常備藥品明細表\game.html" class="tool-link" style="color:#e67e22; border-color:#e67e22;" title="開啟藥物知識小遊戲">🎮 藥物遊戲</a>
                 <a href="https://www.micromedexsolutions.com/micromedex2/librarian/PFActionId/pf.HomePage?isToolPage=true&navitem=topHome" target="_blank" class="tool-link" title="Micromedex">Micromedex</a>
                 <a href="https://mcp.fda.gov.tw/im" target="_blank" class="tool-link" title="仿單查詢">仿單查詢</a>
@@ -293,6 +292,50 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
+            // 📱 手機/電腦版版面切換邏輯
+            function initLayoutMode() {
+                var pref = localStorage.getItem('user-layout-pref') || 'auto';
+                applyLayoutMode(pref);
+            }
+            function applyLayoutMode(mode) {
+                if (mode === 'desktop') {
+                    $('body').removeClass('layout-mobile').addClass('layout-desktop');
+                    $('#btn-toggle-layout').html('📱 切換手機版');
+                    localStorage.setItem('user-layout-pref', 'desktop');
+                } else if (mode === 'mobile') {
+                    $('body').addClass('layout-mobile').removeClass('layout-desktop');
+                    $('#btn-toggle-layout').html('💻 切換電腦版');
+                    localStorage.setItem('user-layout-pref', 'mobile');
+                } else {
+                    var isSmall = window.innerWidth <= 768;
+                    if (isSmall) {
+                        $('body').addClass('layout-mobile').removeClass('layout-desktop');
+                    } else {
+                        $('body').removeClass('layout-mobile').addClass('layout-desktop');
+                    }
+                    $('#btn-toggle-layout').html($('body').hasClass('layout-mobile') ? '💻 切換電腦版' : '📱 切換手機版');
+                    localStorage.setItem('user-layout-pref', 'auto');
+                }
+            }
+            $(document).on('click', '#btn-toggle-layout', function (e) {
+                e.preventDefault();
+                var current = localStorage.getItem('user-layout-pref') || 'auto';
+                if (current === 'auto') {
+                    var isActiveMobile = $('body').hasClass('layout-mobile');
+                    applyLayoutMode(isActiveMobile ? 'desktop' : 'mobile');
+                } else if (current === 'mobile') {
+                    applyLayoutMode('desktop');
+                } else {
+                    applyLayoutMode('mobile');
+                }
+            });
+            $(window).on('resize', function () {
+                if (localStorage.getItem('user-layout-pref') === 'auto') {
+                    applyLayoutMode('auto');
+                }
+            });
+            initLayoutMode();
+
             // 歐巴記得確認 GAS 那邊噴出來的資料結構有對齊喔！
             const API_URL = 'https://script.google.com/macros/s/AKfycbyr8rpN0eVxomHJu_ZfNeBExJIfsz6Ptkb8kM7uGln17d5kdfyiMYgA8QUQ3BUhbaIN/exec';
             const CACHE_KEY = 'ym_drug_cloud_v298';
