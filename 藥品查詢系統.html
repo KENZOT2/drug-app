@@ -435,9 +435,10 @@
                         }, className: 'text-end' },
                         { data: 'k', render: function (val, t, row) {
                             if (row.d === '正常') return '';
+                            var isNoSetting = !val || val === '無設定';
                             var text = val || '無設定';
-                            var color = (val === '設定循環') ? '#dc3545' : (val ? '#d35400' : '#6c757d');
-                            var fw = (val === '設定循環' || val) ? 'bold' : 'normal';
+                            var color = (val === '設定循環') ? '#dc3545' : (isNoSetting ? '#6c757d' : '#d35400');
+                            var fw = (val === '設定循環' || (!isNoSetting)) ? 'bold' : 'normal';
                             return '<span class="d-md-none fw-bold text-secondary">🔄 替代：</span><span style="color:' + color + '; font-weight:' + fw + ';">' + text + '</span>';
                         }, className: 'text-start' },
                         { data: null, render: function (d, t, row) {
