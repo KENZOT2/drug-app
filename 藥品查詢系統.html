@@ -425,7 +425,7 @@
                 $('#globalSearch').on('keyup', function () { table.search(this.value).draw(); });
                 $('#select-atc').on('change', function () {
                     var val = $(this).val();
-                    table.column(5).search(val ? '^' + $.fn.dataTable.util.escapeRegex(val) : '', true, false).draw();
+                    table.column(6).search(val ? '^' + $.fn.dataTable.util.escapeRegex(val) : '', true, false).draw();
                 });
             }
 
