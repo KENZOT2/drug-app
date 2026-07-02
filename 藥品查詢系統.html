@@ -438,10 +438,15 @@
                         { data: 'k', render: function (val, t, row) {
                             if (row.d === '正常') return '';
                             var isNoSetting = !val || val === '無設定';
-                            var text = val || '無設定';
-                            var color = (val === '設定循環') ? '#dc3545' : (isNoSetting ? '#6c757d' : '#d35400');
-                            var fw = (val === '設定循環' || (!isNoSetting)) ? 'bold' : 'normal';
-                            return '<span class="d-md-none fw-bold text-secondary">🔄 替代：</span><span style="color:' + color + '; font-weight:' + fw + ';">' + text + '</span>';
+                            var isCycle = val === '設定循環';
+                            if (isNoSetting || isCycle) {
+                                var color = isCycle ? '#dc3545' : '#6c757d';
+                                var fw = isCycle ? 'bold' : 'normal';
+                                var text = val || '無設定';
+                                return '<span class="d-md-none fw-bold text-secondary">🔄 替代：</span><span style="color:' + color + '; font-weight:' + fw + ';">' + text + '</span>';
+                            } else {
+                                return '<span class="d-md-none fw-bold text-secondary">🔄 替代：</span><a href="#" class="alt-drug-link" data-code="' + val + '" style="color:#d35400; font-weight:bold; text-decoration:underline;">' + val + '</a>';
+                            }
                         }, className: 'text-start' },
                         { data: null, render: function (d, t, row) {
                             // ATC 代碼欄位：filter/sort 回傳純文字，display 才回傳雙行 HTML
@@ -476,6 +481,25 @@
                 $('#clear-atc-btn').on('click', function (e) {
                     e.preventDefault();
                     $('#select-atc').val('').trigger('change');
+                });
+                
+                // 點擊替代碼連動搜尋與狀態篩選
+                $(document).on('click', '.alt-drug-link', function (e) {
+                    e.preventDefault();
+                    var code = $(this).data('code');
+                    if (code) {
+                        $('#globalSearch').val(code);
+                        table.search(code);
+                        var statusBtnGroup = $('#status-btn-group');
+                        statusBtnGroup.find('.btn-filter').removeClass('active');
+                        statusBtnGroup.find('.btn-filter').each(function () {
+                            if ($(this).text() === '正常') {
+                                $(this).addClass('active');
+                            }
+                        });
+                        table.column(3).search('^正常$', true, false);
+                        table.draw();
+                    }
                 });
             }
 
