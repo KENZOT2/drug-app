@@ -248,7 +248,10 @@
                     <input type="text" id="globalSearch" class="form-control form-control-sm" placeholder="代碼、藥名、作用...">
                 </div>
                 <div class="col-md-3">
-                    <label for="select-atc" class="fw-bold small mb-1">🧬 ATC 搜尋</label>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="select-atc" class="fw-bold small mb-0">🧬 ATC 搜尋</label>
+                        <a href="#" id="clear-atc-btn" class="text-primary small text-decoration-none fw-bold" style="font-size: 0.8rem;">清除</a>
+                    </div>
                     <select id="select-atc" class="form-select"></select>
                 </div>
                 <div class="col-md-3">
@@ -469,6 +472,10 @@
                 $('#select-atc').on('change', function () {
                     var val = $(this).val();
                     table.column(6).search(val ? '^' + $.fn.dataTable.util.escapeRegex(val) : '', true, false).draw();
+                });
+                $('#clear-atc-btn').on('click', function (e) {
+                    e.preventDefault();
+                    $('#select-atc').val('').trigger('change');
                 });
             }
 
