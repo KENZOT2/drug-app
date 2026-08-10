@@ -440,14 +440,17 @@
                             return val ? '$' + Math.ceil(parseFloat(val)) : '-';
                         }, className: 'text-end' },
                         { data: 'k', render: function (val, t, row) {
-                            var color = '#6c757d';
-                            var fw = 'normal';
-                            var text = val || '[非合約]';
-                            if (text === '[合約]') { color = '#27ae60'; fw = 'bold'; }
-                            else if (text === '[臨採]') { color = '#e67e22'; fw = 'bold'; }
-                            else if (text === '[未決]') { color = '#d35400'; fw = 'bold'; }
-                            else if (text === '[小額採購]') { color = '#2980b9'; fw = 'bold'; }
-                            return '<span class="d-md-none fw-bold text-secondary">🔄 合約：</span><span style="color:' + color + '; font-weight:' + fw + ';">' + text + '</span>';
+                            if (row.d === '正常') return '';
+                            var isNoSetting = !val || val === '無設定';
+                            var isCycle = val === '設定循環';
+                            if (isNoSetting || isCycle) {
+                                var color = isCycle ? '#dc3545' : '#6c757d';
+                                var fw = isCycle ? 'bold' : 'normal';
+                                var text = val || '無設定';
+                                return '<span class="d-md-none fw-bold text-secondary">🔄 替代：</span><span style="color:' + color + '; font-weight:' + fw + ';">' + text + '</span>';
+                            } else {
+                                return '<span class="d-md-none fw-bold text-secondary">🔄 替代：</span><a href="#" class="alt-drug-link" data-code="' + val + '" style="color:#d35400; font-weight:bold; text-decoration:underline;">' + val + '</a>';
+                            }
                         }, className: 'text-start' },
                         { data: null, render: function (d, t, row) {
                             // ATC 代碼欄位：filter/sort 回傳純文字，display 才回傳雙行 HTML
@@ -467,7 +470,15 @@
                         },
                         {
                             data: null, render: function (d, t, row) {
-                                return '<a href="http://hq-sso2-nvm/ESMC/Home/DetailPage?odr_code=' + row.a + '" target="_blank" class="detail-link">詳細</a>';
+                                var detailHtml = '<a href="http://hq-sso2-nvm/ESMC/Home/DetailPage?odr_code=' + row.a + '" target="_blank" class="detail-link">詳細</a>';
+                                var contract = row.m || '[非合約]';
+                                var color = '#6c757d';
+                                var fw = 'normal';
+                                if (contract === '[合約]') { color = '#27ae60'; fw = 'bold'; }
+                                else if (contract === '[未決]') { color = '#d35400'; fw = 'bold'; }
+                                else if (contract === '[小額採購]') { color = '#2980b9'; fw = 'bold'; }
+                                var contractHtml = '<br><span style="color:' + color + '; font-weight:' + fw + '; font-size:0.8rem; display:block; margin-top:0.15rem;">' + contract + '</span>';
+                                return detailHtml + contractHtml;
                             }, className: 'text-center'
                         }
                     ]
