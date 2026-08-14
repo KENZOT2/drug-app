@@ -224,7 +224,7 @@
                         class="text-muted fs-6">雲端資料版</small></h1>
                 <div class="d-flex align-items-center mt-2">
                     <div id="display-date" class="badge-date">資料生成時間：載入中...</div>
-                    <button class="btn btn-sm btn-outline-secondary ms-2" style="border-radius: 3rem; font-size: 0.75rem; padding: 0.15rem 0.6rem;" onclick="localStorage.removeItem('ym_drug_cloud_v298'); location.reload();" aria-label="重新整理">🔄 重新整理</button>
+                    <button class="btn btn-sm btn-outline-secondary ms-2" style="border-radius: 3rem; font-size: 0.75rem; padding: 0.15rem 0.6rem;" onclick="localStorage.removeItem('ym_drug_cloud_v300'); location.reload();" aria-label="重新整理">🔄 重新整理</button>
                 </div>
             </div>
             <nav class="header-tools" aria-label="外部工具連結">
@@ -344,8 +344,9 @@
 
             // 歐巴記得確認 GAS 那邊噴出來的資料結構有對齊喔！
             const API_URL = 'https://script.google.com/macros/s/AKfycbyr8rpN0eVxomHJu_ZfNeBExJIfsz6Ptkb8kM7uGln17d5kdfyiMYgA8QUQ3BUhbaIN/exec';
-            const CACHE_KEY = 'ym_drug_cloud_v298';
+            const CACHE_KEY = 'ym_drug_cloud_v300';
             const CACHE_TTL = 30 * 60 * 1000; // 30 分鐘快取
+            const STATIC_ATC = [{"c": "A01", "l": "口腔製劑"}, {"c": "A02", "l": "胃酸相關疾病用藥"}, {"c": "A03", "l": "胃腸道功能性疾病用藥"}, {"c": "A04", "l": "止吐與抗噁心藥"}, {"c": "A05", "l": "膽汁與肝臟疾病用藥"}, {"c": "A06", "l": "便秘用藥"}, {"c": "A07", "l": "止瀉藥及腸道抗發炎/抗感染藥"}, {"c": "A08", "l": "抗肥胖製劑(不含減肥食品"}, {"c": "A09", "l": "消化劑(包含酵素"}, {"c": "A10", "l": "糖尿病用藥"}, {"c": "A11", "l": "維生素"}, {"c": "A12", "l": "礦物質補充劑"}, {"c": "A13", "l": "滋補劑"}, {"c": "A14", "l": "全身性同化製劑"}, {"c": "A15", "l": "食慾促進劑"}, {"c": "A16", "l": "其他消化道與代謝用藥"}, {"c": "B01", "l": "抗血栓劑"}, {"c": "B02", "l": "抗出血藥"}, {"c": "B03", "l": "抗貧血製劑"}, {"c": "B05", "l": "代血漿及灌注液"}, {"c": "B06", "l": "其他血液製劑"}, {"c": "C01", "l": "心臟疾病用藥"}, {"c": "C02", "l": "抗高血壓藥"}, {"c": "C03", "l": "利尿劑"}, {"c": "C04", "l": "周邊血管擴張劑"}, {"c": "C05", "l": "血管保護劑"}, {"c": "C07", "l": "β-阻斷劑"}, {"c": "C08", "l": "鈣離子通道阻斷劑"}, {"c": "C09", "l": "作用於腎素-血管張力素系統之藥物"}, {"c": "C10", "l": "降血脂藥物"}, {"c": "D01", "l": "皮膚用抗黴菌藥"}, {"c": "D02", "l": "潤膚劑與保護劑"}, {"c": "D03", "l": "傷口與潰瘍治療製劑"}, {"c": "D04", "l": "止癢藥(含抗組織胺、麻醉藥等"}, {"c": "D05", "l": "抗乾癬藥"}, {"c": "D06", "l": "皮膚用抗生素與化學治療藥"}, {"c": "D07", "l": "皮膚用皮質類固醇製劑"}, {"c": "D08", "l": "防腐劑與消毒劑"}, {"c": "D09", "l": "藥用敷料"}, {"c": "D10", "l": "抗痤瘡製劑"}, {"c": "D11", "l": "其他皮膚科製劑"}, {"c": "G01", "l": "婦科抗感染藥與防腐劑"}, {"c": "G02", "l": "其他婦科用藥"}, {"c": "G03", "l": "性荷爾蒙與生殖系統調節劑"}, {"c": "G04", "l": "泌尿科用藥"}, {"c": "H01", "l": "腦下垂體與下視丘荷爾蒙及類似物"}, {"c": "H02", "l": "全身性皮質類固醇"}, {"c": "H03", "l": "甲狀腺疾病用藥"}, {"c": "H04", "l": "胰臟荷爾蒙"}, {"c": "H05", "l": "鈣恆定平衡用藥"}, {"c": "J01", "l": "全身性抗菌藥"}, {"c": "J02", "l": "全身性抗黴菌藥"}, {"c": "J04", "l": "抗分枝桿菌藥"}, {"c": "J05", "l": "全身性抗病毒藥"}, {"c": "J06", "l": "免疫血清與免疫球蛋白"}, {"c": "J07", "l": "疫苗"}, {"c": "L01", "l": "抗腫瘤藥"}, {"c": "L02", "l": "內分泌治療"}, {"c": "L03", "l": "免疫刺激劑"}, {"c": "L04", "l": "免疫抑制劑"}, {"c": "M01", "l": "抗發炎與抗風濕藥"}, {"c": "M02", "l": "關節與肌肉疼痛之外用藥"}, {"c": "M03", "l": "肌肉鬆弛劑"}, {"c": "M04", "l": "抗痛風製劑"}, {"c": "M05", "l": "骨骼疾病用藥"}, {"c": "M09", "l": "其他肌肉骨骼系統疾病用藥"}, {"c": "N01", "l": "麻醉劑"}, {"c": "N02", "l": "止痛藥"}, {"c": "N03", "l": "抗癲癇藥"}, {"c": "N04", "l": "抗帕金森氏症藥物"}, {"c": "N05", "l": "精神鎮靜藥"}, {"c": "N06", "l": "精神興奮劑"}, {"c": "N07", "l": "其他神經系統藥物"}, {"c": "P01", "l": "抗原蟲藥"}, {"c": "P02", "l": "驅蟲藥"}, {"c": "P03", "l": "殺外寄生蟲劑(含殺疥劑、殺蟲劑及驅蚊蟲劑"}, {"c": "R01", "l": "鼻部製劑"}, {"c": "R02", "l": "喉部製劑"}, {"c": "R03", "l": "阻塞性呼吸道疾病用藥"}, {"c": "R05", "l": "咳嗽與感冒製劑"}, {"c": "R06", "l": "全身性抗組織胺"}, {"c": "R07", "l": "其他呼吸系統用藥"}, {"c": "S01", "l": "眼科用藥"}, {"c": "S02", "l": "耳科用藥"}, {"c": "S03", "l": "眼科與耳科製劑"}, {"c": "V01", "l": "過敏原"}, {"c": "V03", "l": "其他治療用藥"}, {"c": "V04", "l": "診斷用藥"}, {"c": "V06", "l": "一般營養品"}, {"c": "V07", "l": "其他非治療用產品"}, {"c": "V08", "l": "顯影劑"}, {"c": "V09", "l": "診斷用放射性藥物"}, {"c": "V10", "l": "治療用放射性藥物"}, {"c": "V20", "l": "外科敷料"}];
 
             function loadCache() {
                 try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch (e) { return null; }
@@ -355,18 +356,21 @@
             }
 
             function renderPage(data) {
+                if (!data) return;
                 $('#display-date').text('資料日期：' + (data.date || '未知'));
+                var atcList = (data.atc && Array.isArray(data.atc) && data.atc.length > 0) ? data.atc : STATIC_ATC;
                 var atcSelect = $('#select-atc');
                 atcSelect.empty().append('<option value="">全部 ATC 分類</option>');
-                data.atc.forEach(function (item) {
+                atcList.forEach(function (item) {
                     atcSelect.append('<option value="' + item.c + '">' + item.c + ' (' + item.l + ')</option>');
                 });
                 atcSelect.select2({ theme: 'bootstrap-5', width: '100%' });
                 
-                // 建立 ATC 前綴查詢 Map，用於補内1欄位 (ATC 中文說明)
+                // 建立 ATC 前綴查詢 Map，用於補足欄位 (ATC 中文說明)
                 var atcMap = {};
-                (data.atc || []).forEach(function(item) { atcMap[item.c] = item.l; });
+                atcList.forEach(function(item) { atcMap[item.c] = item.l; });
                 function findAtcLabel(code) {
+                    if (!code) return '';
                     var lens = [7, 5, 4, 3, 1];
                     for (var li = 0; li < lens.length; li++) {
                         var lbl = atcMap[code.substring(0, lens[li])];
@@ -378,11 +382,25 @@
                     }
                     return '';
                 }
-                // 轉換藥品陣列，加入 i (處理後的 ATC 中文說明)
-                var drugs = data.drugs.map(function (item) {
-                    return { a: item.a, b: item.b, c: item.c, d: item.d, e: item.e, f: item.f, g: item.g, h: item.h || '', i: item.i || findAtcLabel(item.f || ''), j: item.j || '', k: item.k || '' };
+                // 轉換藥品陣列，加入 i (處理後的 ATC 中文說明) 與 m (合約別)
+                var rawDrugs = data.drugs || [];
+                var drugs = rawDrugs.map(function (item) {
+                    return {
+                        a: item.a || '',
+                        b: item.b || '',
+                        c: item.c || '',
+                        d: item.d || '',
+                        e: item.e || '',
+                        f: item.f || '',
+                        g: item.g || '',
+                        h: item.h || '',
+                        i: item.i || findAtcLabel(item.f || ''),
+                        j: item.j || '',
+                        k: item.k || '',
+                        m: item.m || '[非合約]'
+                    };
                 });
-                initTable(drugs, data.atc);
+                initTable(drugs, atcList);
                 $('#loader-wrapper').fadeOut();
                 $('#table-content').fadeIn();
             }
@@ -392,7 +410,7 @@
                 renderPage(cached.data);
                 if (Date.now() - cached.ts > CACHE_TTL) {
                     fetch(API_URL).then(function (r) { return r.json(); }).then(function (fresh) {
-                        if (!fresh.error) saveCache(fresh);
+                        if (fresh && !fresh.error) saveCache(fresh);
                     }).catch(function () {
                         fetch('data.json').then(function (r) { return r.json(); }).then(function (fresh) {
                             saveCache(fresh);
@@ -401,7 +419,7 @@
                 }
             } else {
                 fetch(API_URL).then(function (res) { return res.json(); }).then(function (data) {
-                    if (data.error) throw new Error(data.error);
+                    if (!data || data.error) throw new Error((data && data.error) || '無效資料');
                     saveCache(data);
                     renderPage(data);
                 }).catch(function () {
